@@ -1,28 +1,23 @@
 import curses
-import RPi.GPIO as GPIO
-import time
 from gpiozero import Robot
-
+from gpiozero import PWMLED
 
 robot = Robot(left=(17, 18), right=(23, 25))
-servoCtl = 4
+servo = PWMLED(4)
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(servoCtl, GPIO.OUT)
-pin = GPIO.PWM(servoCtl, 50)
-pin.start(2.5)
+servo.value = 0
 
-def extend(value):
-    pin.ChangeDutyCycle(value)
+def extend(dCycle):
+    servo.value = dCycle
 
 actions = {
     curses.KEY_UP:    robot.forward,
     curses.KEY_DOWN:  robot.backward,
     curses.KEY_LEFT:  robot.left,
     curses.KEY_RIGHT: robot.right,
-    curses.KEY_F6:    extend(2.5),
-    curses.KEY_F7:    extend(7.5),
 }
+
+servo.off
 
 def main(window):
     next_key = None
@@ -39,13 +34,16 @@ def main(window):
             action = actions.get(key)
             if action is not None:
                 action()
+            elif key == curses.KEY_SLEFT:
+                extend(0.07)
+            elif key == curses.KEY_SRIGHT:
+                extend(0.20)
+            elif key == curses.KEY_BACKSPACE:
+                extend(0.00)
             next_key = key
             while next_key == key:
                 next_key = window.getch()
             # KEY RELEASED
             robot.stop()
-
-pin.stop()
-GPIO.cleanup()
 
 curses.wrapper(main)
