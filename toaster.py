@@ -46,6 +46,5 @@ def main(window):
             robot.stop()
 
 pin.stop()
-GPIO.cleanup()
-
 curses.wrapper(main)
+GPIO.cleanup()
