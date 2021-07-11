@@ -1,9 +1,20 @@
 import curses
 from gpiozero import Robot
 from gpiozero import PWMLED
+import RPi.GPIO as GPIO
+import dht11
+from datetime import datetime
+
+
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+GPIO.cleanup()
 
 robot = Robot(left=(17, 18), right=(23, 25))
 servo = PWMLED(4)
+instance = dht11.DHT11(pin = 24)
+
+
 
 
 servo.value = 0
@@ -22,8 +33,21 @@ actions = {
 servo.off
 
 def main(window):
+    # initialize GPIO   
     next_key = None
     while True:
+        result = instance.read()
+        if result.is_valid():
+            print("Temperature: %-3.1f C" % result.temperature)
+            print("Humidity: %-3.1f %%" % result.humidity)
+            f = open("sample.csv", "a")
+            f.write(datetime.now().strftime("%H:%M:%S")+","+str(result.temperature)+","+str(result.humidity)+"\n")
+            f.close()
+        else:
+            print("Error: %d" % result.error_code)
+            f = open("sample.csv", "a")
+            f.write(datetime.now().strftime("%H:%M:%S")+",ERROR," + str(result.error_code)+"\n")
+            f.close()
         curses.halfdelay(1)
         if next_key is None:
             key = window.getch()
