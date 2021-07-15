@@ -1,5 +1,8 @@
 #################################################################################
 # the following code is based on documention provided by gpiozero.readthedocs.io
+# Written in part by:
+# - Stefan T
+# - Sebastian L
 #################################################################################
 
 # import libaries 
