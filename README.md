@@ -51,7 +51,7 @@ Written in part by:
     11. Save and exit ( ctr + x)
     12. sudo service motion restart
     13. sudo motion
- 6.  wget "https://raw.githubusercontent.com/jchiedrap/ROV/release/rov.py"
+ 6.  wget "https://raw.githubusercontent.com/KelpieRobotics/prototype/release/rov.py"
 
 ## Setup Instructions on Laptop
 1. SSH into the raspberry pi using the computer for example 'ssh pi@192.168.40.149' with '192.168.40.149' being the pi's ip address which can be found on the router's web interface
